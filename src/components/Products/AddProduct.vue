@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     save() {
-      console.log(this.product, 'product/store');
+
       const headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json',
@@ -95,12 +95,29 @@ export default {
           {
             headers: headers
           }
-      ).then((res) =>{
-        console.log(res);
-        this.alert = res.data;
-      }).catch((errors)=>{
+      ).then(response => {
+        
+        this.alert = response.data;
+
+        this.resetForm();
+
+        setTimeout(() => {
+          this.alert = '';
+        }, 2000);
+
+      }).catch(errors =>{
         console.log(errors)
       })
+    },
+    resetForm() {
+      this.product = {
+        name: '',
+        sku: '',
+        price: '',
+        category_id: '',
+        description: '',
+        image: null,
+      }
     },
     addImage(item) {
       this.product.image = item.target.files[0];
