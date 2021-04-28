@@ -3,7 +3,7 @@
     <div class="container">
       <div class="mt-5">
         <div class="card">
-          <div class="card-header text-center">Add Product</div>
+          <div class="card-header text-center">Edit Product</div>
           <div class="card-body">
             <div class="alert alert-success" role="alert" v-if="alert">
               {{alert}}
@@ -49,7 +49,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <button class="btn btn-outline-primary" @click.prevent="save">Save</button>
+                <button class="btn btn-outline-primary" @click.prevent="updateProduct">Update</button>
               </div>
             </form>
 
@@ -64,63 +64,19 @@
 import axios from "axios";
 
 export default {
-  name: "AddProduct",
+  name: "EditProduct",
   data() {
     return {
-      product: {
-        name: '',
-        sku: '',
-        price: '',
-        category_id: '',
-        description: '',
-        image: null,
-      },
+      product: {},
       categories: [],
       alert: '',
     }
   },
   created() {
     this.getCategories();
+    this.getProduct();
   },
   methods: {
-    save() {
-      const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-      }
-      axios.post(
-          'http://localhost:8000/product/store',
-          this.product,
-          {
-            headers: headers
-          }
-      ).then(response => {
-
-        this.alert = response.data;
-
-        this.resetForm();
-
-        setTimeout(() => {
-          this.alert = '';
-        }, 2000);
-
-      }).catch(errors =>{
-        console.log(errors)
-      })
-    },
-    resetForm() {
-      this.product = {
-        name: '',
-        sku: '',
-        price: '',
-        category_id: '',
-        description: '',
-        image: null,
-      }
-    },
-    addImage(item) {
-      this.product.image = item.target.files[0];
-    },
     getCategories() {
       const headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -136,7 +92,41 @@ export default {
       }).catch((errors)=>{
         console.log(errors)
       })
-    }
+    },
+    updateProduct() {
+      const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }
+      axios.post('http://localhost:8000/product/update', this.product, {
+        headers: headers
+      }).then(({data}) =>{
+        this.alert = data;
+        setTimeout(() => {
+          this.alert = '';
+        }, 2000);
+      }).catch((errors)=>{
+        console.log(errors)
+      })
+    },
+    getProduct() {
+      const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }
+      axios.post('http://localhost:8000/product/show', {id: this.$route.params.id}, {
+        headers: headers
+      }).then(({data}) =>{
+        this.product = data[0];
+        console.log(this.product)
+      }).catch((errors)=>{
+        console.log(errors)
+      })
+    },
+
+    addImage(item) {
+      this.product.image = item.target.files[0];
+    },
   }
 }
 </script>

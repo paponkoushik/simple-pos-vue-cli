@@ -4,10 +4,12 @@
         <div class="card">
           <div class="card-header text-center">Products</div>
           <div class="card-body">
+            <div class="alert alert-success" role="alert" v-if="alert">
+              {{alert}}
+            </div>
             <table class="table">
               <thead>
               <tr>
-                <th scope="col">Sl</th>
                 <th scope="col">Name</th>
                 <th scope="col">SKU</th>
                 <th scope="col">Category</th>
@@ -19,7 +21,6 @@
               </thead>
               <tbody  v-if="products.length">
               <tr v-for="(product,index) in products" :key="index">
-                <td scope="row">1</td>
                 <td>{{product.name}}</td>
                 <td>{{product.sku}}</td>
                 <td>{{product.category}}</td>
@@ -27,8 +28,8 @@
                 <td>{{product.price}}</td>
                 <td>{{product.image}}</td>
                 <td>
-                  <button class="btn btn-outline-primary ml-2">Edit</button>
-                  <button class="btn btn-outline-danger ml-2">Delete</button>
+                  <router-link :to="`/edit-products/${product.id}`" class="btn btn-outline-primary ml-2">Edit</router-link>
+                  <button class="btn btn-outline-danger ml-2" @click.prevent="deleteProduct(product)">Delete</button>
                 </td>
               </tr>
               </tbody>
@@ -47,11 +48,14 @@ export default {
   data() {
     return {
       products: [],
+      alert: ''
     }
   },
+
   created() {
     this.getProducts();
   },
+
   methods: {
     getProducts() {
       const headers = {
@@ -64,12 +68,37 @@ export default {
             headers: headers
           }
       ).then(({data}) =>{
-
         this.products = data;
-        console.log(this.products)
       }).catch((errors)=>{
         console.log(errors)
       })
+    },
+
+    deleteProduct(product) {
+      const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+      }
+
+      axios.post(
+          'http://localhost:8000/product/delete', {id: product.id},
+          {
+            headers: headers
+          }
+      ).then(response => {
+        this.alert = response.data;
+        this.getProducts();
+
+        setTimeout(() => {
+          this.alert = '';
+        }, 2500);
+
+      }).catch(errors => {
+        console.log(errors)
+      })
+    },
+    editProduct(id) {
+      console.log(id);
     }
   }
 }
