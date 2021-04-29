@@ -60,6 +60,7 @@
 
 <script>
 import axios from "axios";
+import {formDataAssigner} from "../Helpers/helpers";
 
 export default {
   name: "AddProduct",
@@ -71,8 +72,8 @@ export default {
         price: '',
         category_id: '',
         description: '',
-        image: null,
       },
+      image: '',
       categories: [],
       alert: '',
     }
@@ -82,11 +83,16 @@ export default {
   },
   methods: {
     save() {
+      let formData = formDataAssigner(new FormData, this.product);
+
+      if (this.image) {
+        formData.append('image', this.image)
+      }
       axios.post(
           this.$apiUrl + 'product/store',
-          this.product,
+          formData,
           {
-            headers: this.$headerContent
+            headers: this.$headerFileContent
           }
       ).then(response => {
 
@@ -96,7 +102,7 @@ export default {
 
         setTimeout(() => {
           this.alert = '';
-        }, 2000);
+        }, 50000000000000);
 
       }).catch(errors =>{
         console.log(errors)
@@ -113,7 +119,7 @@ export default {
       }
     },
     addImage(item) {
-      this.product.image = item.target.files[0];
+      this.image = item.target.files[0];
     },
     getCategories() {
       axios.get(

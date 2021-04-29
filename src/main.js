@@ -17,6 +17,10 @@ Vue.prototype.$headerContent = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Accept': 'application/json',
 };
+Vue.prototype.$headerFileContent = {
+    'Content-Type': 'multipart/form-data',
+    'Accept': 'application/json',
+};
 Vue.prototype.$apiUrl = "http://localhost:8000/";
 
 new Vue({
