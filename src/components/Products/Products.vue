@@ -26,7 +26,9 @@
                 <td>{{product.category}}</td>
                 <td>{{product.description}}</td>
                 <td>{{product.price}}</td>
-                <td>{{product.image}}</td>
+                <td>
+                  <img v-if="product.image" :src="`${$apiUrl+'/'+product.image}`" width="80" height="50"/>
+                </td>
                 <td>
                   <router-link :to="`/edit-products/${product.id}`" class="btn btn-outline-primary ml-2">Edit</router-link>
                   <button class="btn btn-outline-danger ml-2" @click.prevent="deleteProduct(product)">Delete</button>

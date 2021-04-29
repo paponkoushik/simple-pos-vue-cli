@@ -89,9 +89,7 @@ export default {
         formData.append('image', this.image)
       }
       axios.post(
-          this.$apiUrl + 'product/store',
-          formData,
-          {
+          this.$apiUrl + 'product/store', formData, {
             headers: this.$headerFileContent
           }
       ).then(response => {
@@ -102,7 +100,7 @@ export default {
 
         setTimeout(() => {
           this.alert = '';
-        }, 50000000000000);
+        }, 2000);
 
       }).catch(errors =>{
         console.log(errors)
@@ -115,8 +113,8 @@ export default {
         price: '',
         category_id: '',
         description: '',
-        image: null,
       }
+      this.image = '';
     },
     addImage(item) {
       this.image = item.target.files[0];

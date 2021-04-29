@@ -60,6 +60,7 @@
 
 <script>
 import axios from "axios";
+import {formDataAssigner} from "../Helpers/helpers";
 
 export default {
   name: "EditProduct",
@@ -68,6 +69,7 @@ export default {
       product: {},
       categories: [],
       alert: '',
+      image: ''
     }
   },
   created() {
@@ -76,8 +78,14 @@ export default {
   },
   methods: {
     updateProduct() {
-      axios.post(this.$apiUrl + 'product/update', this.product, {
-        headers: this.$headerContent
+      let formData = formDataAssigner(new FormData, this.product);
+
+      if (this.image) {
+        formData.append('new_image', this.image)
+      }
+
+      axios.post(this.$apiUrl + 'product/update', formData, {
+        headers: this.$headerFileContent
       }).then(({data}) =>{
         this.alert = data;
         setTimeout(() => {
@@ -110,7 +118,7 @@ export default {
     },
 
     addImage(item) {
-      this.product.image = item.target.files[0];
+      this.image = item.target.files[0];
     },
   }
 }
