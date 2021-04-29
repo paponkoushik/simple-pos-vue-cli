@@ -118,7 +118,6 @@ export default {
         headers: headers
       }).then(({data}) =>{
         this.product = data[0];
-        console.log(this.product)
       }).catch((errors)=>{
         console.log(errors)
       })
