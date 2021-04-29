@@ -90,6 +90,7 @@ export default {
         this.alert = data;
         setTimeout(() => {
           this.alert = '';
+          this.$router.push('/products');
         }, 2000);
       }).catch((errors)=>{
         console.log(errors)
