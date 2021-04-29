@@ -24,7 +24,6 @@
                 <button class="btn btn-outline-primary" @click.prevent="updateOrder">Update</button>
               </div>
             </form>
-
           </div>
         </div>
       </div>
@@ -58,7 +57,16 @@ export default {
       })
     },
     updateOrder() {
-      console.log(this.order, 'called');
+      axios.post(this.$apiUrl + 'order/update', {id: this.order.id, status: this.order.status}, {
+        headers: this.$headerContent
+      }).then(({data}) =>{
+        this.alert = data;
+        setTimeout(() => {
+          this.alert = '';
+        }, 2000);
+      }).catch((errors)=>{
+        console.log(errors)
+      })
     }
   }
 }
