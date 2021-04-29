@@ -41,15 +41,10 @@ export default {
   },
   methods: {
     save() {
-
-      const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-      }
       axios.get(
-          'http://localhost:8000/products',
+          this.$apiUrl + 'products',
           {
-            headers: headers
+            headers: this.$headerContent
           }
       ).then(res =>{
         console.log(res);

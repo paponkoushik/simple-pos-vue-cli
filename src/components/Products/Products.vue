@@ -58,14 +58,10 @@ export default {
 
   methods: {
     getProducts() {
-      const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-      }
       axios.get(
-          'http://localhost:8000/products',
+          this.$apiUrl + 'products',
           {
-            headers: headers
+            headers: this.$headerContent
           }
       ).then(({data}) =>{
         this.products = data;
@@ -75,15 +71,10 @@ export default {
     },
 
     deleteProduct(product) {
-      const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-      }
-
       axios.post(
-          'http://localhost:8000/product/delete', {id: product.id},
+          this.$apiUrl + 'product/delete', {id: product.id},
           {
-            headers: headers
+            headers: this.$headerContent
           }
       ).then(response => {
         this.alert = response.data;

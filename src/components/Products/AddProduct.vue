@@ -84,15 +84,11 @@ export default {
   },
   methods: {
     save() {
-      const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-      }
       axios.post(
-          'http://localhost:8000/product/store',
+          this.$apiUrl + 'product/store',
           this.product,
           {
-            headers: headers
+            headers: this.$headerContent
           }
       ).then(response => {
 
@@ -122,14 +118,10 @@ export default {
       this.product.image = item.target.files[0];
     },
     getCategories() {
-      const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-      }
       axios.get(
-          'http://localhost:8000/categories',
+          this.$apiUrl + 'categories',
           {
-            headers: headers
+            headers: this.$headerContent
           }
       ).then(({data}) =>{
         this.categories = data;

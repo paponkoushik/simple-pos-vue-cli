@@ -14,11 +14,11 @@
             </thead>
             <tbody  v-if="orders.length">
             <tr v-for="(order,index) in orders" :key="index">
-              <td>{{order.status}}</td>
+              <td>{{order.status.charAt(0).toUpperCase() + order.status.slice(1)}}</td>
               <td>{{order.quantity}}</td>
               <td>{{order.total}}</td>
               <td>
-                <router-link :to="`/edit-products/${order.id}`" class="btn btn-outline-primary ml-2">Edit</router-link>
+                <router-link :to="`/edit-order/${order.id}`" class="btn btn-outline-primary ml-2">Edit</router-link>
               </td>
             </tr>
             </tbody>
@@ -44,18 +44,13 @@ export default {
   },
   methods: {
     getOrders() {
-      const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-      }
       axios.get(
-          'http://localhost:8000/orders',
+          this.$apiUrl + 'orders',
           {
-            headers: headers
+            headers: this.$headerContent
           }
       ).then(({data}) =>{
         this.orders = data;
-        console.log(this.orders)
       }).catch((errors)=>{
         console.log(errors)
       })

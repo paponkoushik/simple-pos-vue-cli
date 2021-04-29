@@ -77,29 +77,9 @@ export default {
     this.getProduct();
   },
   methods: {
-    getCategories() {
-      const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-      }
-      axios.get(
-          'http://localhost:8000/categories',
-          {
-            headers: headers
-          }
-      ).then(({data}) =>{
-        this.categories = data;
-      }).catch((errors)=>{
-        console.log(errors)
-      })
-    },
     updateProduct() {
-      const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-      }
-      axios.post('http://localhost:8000/product/update', this.product, {
-        headers: headers
+      axios.post(this.$apiUrl + 'product/update', this.product, {
+        headers: this.$headerContent
       }).then(({data}) =>{
         this.alert = data;
         setTimeout(() => {
@@ -110,14 +90,22 @@ export default {
       })
     },
     getProduct() {
-      const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-      }
-      axios.post('http://localhost:8000/product/show', {id: this.$route.params.id}, {
-        headers: headers
+      axios.post(this.$apiUrl + 'product/show', {id: this.$route.params.id}, {
+        headers: this.$headerContent
       }).then(({data}) =>{
         this.product = data[0];
+      }).catch((errors)=>{
+        console.log(errors)
+      })
+    },
+    getCategories() {
+      axios.get(
+          this.$apiUrl + 'categories',
+          {
+            headers: this.$headerContent
+          }
+      ).then(({data}) =>{
+        this.categories = data;
       }).catch((errors)=>{
         console.log(errors)
       })
@@ -129,7 +117,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
