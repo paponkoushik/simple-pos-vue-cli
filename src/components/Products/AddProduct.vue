@@ -3,6 +3,12 @@
     <div class="mt-5">
       <div class="card">
         <div class="card-header text-center">Add Product</div>
+        <div class="mb-2" v-if="errors.length">
+          <b>Please correct the following error(s):</b>
+          <ul>
+            <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
+          </ul>
+        </div>
         <div class="card-body">
           <div class="alert alert-success" role="alert" v-if="alert">
             {{alert}}
@@ -48,7 +54,7 @@
               </div>
             </div>
             <div class="form-group">
-              <button class="btn btn-outline-primary" @click.prevent="save">Save</button>
+              <button class="btn btn-outline-primary" @click.prevent="validateProduct">Save</button>
             </div>
           </form>
 
@@ -76,12 +82,26 @@ export default {
       image: '',
       categories: [],
       alert: '',
+      errors: [],
     }
   },
   created() {
     this.getCategories();
   },
   methods: {
+    validateProduct() {
+      if (!this.product.name) {
+        this.errors.push("Product name is required.");
+      } else if (!this.product.sku) {
+        this.errors.push("Product SKU is required");
+      } else if (!this.product.price) {
+        this.errors.push("Product Price is required")
+      } else if (!this.product.category_id) {
+        this.errors.push("Category is required")
+      } else {
+        this.save();
+      }
+    },
     save() {
       let formData = formDataAssigner(new FormData, this.product);
 
@@ -131,7 +151,7 @@ export default {
         console.log(errors)
       })
     }
-  }
+  },
 }
 </script>
 

@@ -4,6 +4,12 @@
       <div class="card">
         <div class="card-header text-center">Edit Product</div>
         <div class="card-body">
+          <div class="mb-2" v-if="errors.length">
+            <b>Please correct the following error(s):</b>
+            <ul>
+              <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
+            </ul>
+          </div>
           <div class="alert alert-success" role="alert" v-if="alert">
             {{alert}}
           </div>
@@ -48,7 +54,7 @@
               </div>
             </div>
             <div class="form-group">
-              <button class="btn btn-outline-primary" @click.prevent="updateProduct">Update</button>
+              <button class="btn btn-outline-primary" @click.prevent="validateProduct">Update</button>
             </div>
           </form>
 
@@ -69,7 +75,8 @@ export default {
       product: {},
       categories: [],
       alert: '',
-      image: ''
+      image: '',
+      errors: [],
     }
   },
   created() {
@@ -77,6 +84,19 @@ export default {
     this.getProduct();
   },
   methods: {
+    validateProduct() {
+      if (!this.product.name) {
+        this.errors.push("Product name is required.");
+      } else if (!this.product.sku) {
+        this.errors.push("Product SKU is required");
+      } else if (!this.product.price) {
+        this.errors.push("Product Price is required")
+      } else if (!this.product.category_id) {
+        this.errors.push("Category is required")
+      } else {
+        this.updateProduct();
+      }
+    },
     updateProduct() {
       let formData = formDataAssigner(new FormData, this.product);
 
